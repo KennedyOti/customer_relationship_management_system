@@ -1,4 +1,29 @@
 {% extends 'accounts/main.html' %}
  {% block content %}
- <h1>Products</h1>
+ <h2>Product Store</h2>
+ 
+ <table>
+    <tr>
+      <th>Product Name</th>
+      <th>Product Type</th>
+      <th>Quantity</th>
+      <th>Buying Price</th>
+      <th>Selling Price</th>
+      <th>Date Added</th>
+      <th>Update Product</th>
+      <th>Delete Product</th>
+    </tr>
+    {% for i in products %}
+    <tr>
+        <td>{{i.product_name}}</td>
+        <td>{{i.product_type}}</td>
+        <td>{{i.product_qtty}}</td>
+        <td>{{i.product_bp}}</td>
+        <td>{{i.product_sp}}</td>
+        <td>{{i.date_added}}</td>
+        <td><a class="btn btn-sm btn-info" href="">Update</a></td>
+        <td><a class="btn btn-sm btn-danger" href="">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
  {% endblock %}
