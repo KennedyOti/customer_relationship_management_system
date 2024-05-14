@@ -1,7 +1,7 @@
 {% extends 'accounts/main.html' %}
 
 {% block content %}
-<h2>Sales Made</h2>
+<h2>Sales Records</h2>
 <table>
     <tr>
       <th>Product Name</th>
@@ -15,8 +15,9 @@
         <td>{{i.product}}</td>
         <td>{{i.quantity_sold}}</td>
         <td>{{i.date_made}}</td>
-        <td><a class="btn btn-sm btn-info" href="">Update</a></td>
-        <td><a class="btn btn-sm btn-danger" href="">Delete</a></td>
+        <td><a class="btn btn-sm btn-info" href="{% if i.id %}{% url 'updatesale' i.id %}{% endif %}">Update</a></td>
+
+        <td><a class="btn btn-sm btn-danger" href="{% if i.id %}{% url 'deletesale' i.id %}{% endif %}">Delete</a></td>
     </tr>
     {% endfor %}
   </table>
