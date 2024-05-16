@@ -11,6 +11,8 @@ urlpatterns = [
     path('makesale/', views.makeSale, name='makesale'),
     path('updatesale/<str:pk>/', views.updateSale, name="updatesale"),
     path('deletesale/<str:pk>/', views.deleteSale, name="deletesale"),
-
+    path('signup/', views.signup, name='signup'),
+    path('signin/', views.signin, name='signin'),
+    path('signout/', views.signOutUser, name='signout'),
 
 ]

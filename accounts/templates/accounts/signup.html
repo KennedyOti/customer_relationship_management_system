@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup Page</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    .form-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-top: 50px;
+      background-color: #fff; /* Background color for the form */
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Adding a shadow effect */
+    }
+    .form-container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ff0000; /* Red color for the heading */
+    }
+    .form-group label {
+      color: #ff0000; /* Red color for labels */
+    }
+    .form-control {
+      border-color: #ff0000; /* Red border color for form controls */
+    }
+    .btn-primary {
+      background-color: #ff0000; /* Red color for the primary button */
+      border-color: #ff0000; /* Red border color for the primary button */
+    }
+    .btn-primary:hover {
+      background-color: #cc0000; /* Darker shade of red on button hover */
+      border-color: #cc0000; /* Darker shade of red on button hover */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="form-container">
+          <h2>Sign Up</h2>
+          <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" name="username" id="username" class="form-control" value="{{ form.username.value }}" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" name="email" id="email" class="form-control" value="{{ form.email.value }}" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" name="password1" id="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" name="password2" id="confirmPassword" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+          </form>
+        </div>
+        {{form.errors}}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
