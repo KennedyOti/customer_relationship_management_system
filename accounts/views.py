@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from .forms import SaleForm
+from .filters import SaleFilter
 
 # Create your views here.
 
@@ -17,7 +18,10 @@ def products(request):
 # This function renders the sales page
 def sales(request):
     sales = Sale.objects.all()
-    return render(request, 'accounts/sales.html', {'sales':sales})
+    myFilter = SaleFilter(request.GET, queryset=sales)
+    sales = myFilter.qs
+    context = {'sales':sales,'myFilter':myFilter}
+    return render(request, 'accounts/sales.html', context)
 
 # This function renders the reports page
 def reports(request):
@@ -54,5 +58,3 @@ def deleteSale(request, pk):
         return redirect('/sales')
     context = {'sale':sale}
     return render(request, 'accounts/delete.html', context)
-    
- 

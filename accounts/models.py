@@ -19,4 +19,5 @@ class Products (models.Model):
 class Sale(models.Model):
     product= models.ForeignKey(Products, null=True, on_delete= models.SET_NULL)
     quantity_sold = models.IntegerField(null=True)
+    #sale_note = models.CharField(max_length=200, null=True)
     date_made = models.DateTimeField(auto_now_add=True, null=True)
