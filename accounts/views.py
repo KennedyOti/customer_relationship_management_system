@@ -7,16 +7,20 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login,logout
+from .decorators import unauthenticated_user, allowed_users, admin_only
+from django.contrib.auth.models import Group
 
 # Create your views here.
 
 # This function renders homepage
 @login_required(login_url='signin')
+@admin_only
 def homepage(request):
     return render(request, 'accounts/dashboard.html')
 
 # This function renders the product page
 @login_required(login_url='signin')
+@allowed_users(allowed_roles=['admin'])
 def products(request):
     products = Products.objects.all()
     return render(request, 'accounts/products.html', {'products':products})
@@ -32,6 +36,7 @@ def sales(request):
 
 # This function renders the reports page
 @login_required(login_url='signin')
+@allowed_users(allowed_roles=['admin'])
 def reports(request):
     return render(request, 'accounts/reports.html')
 
@@ -42,7 +47,7 @@ def makeSale(request):
         form = SaleForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('/sales')
     context = {'form':form}
     return render(request, 'accounts/makesale.html', context)
 
@@ -59,7 +64,6 @@ def updateSale(request, pk):
     context = {'form': form}
     return render(request, 'accounts/makesale.html', context)
 
-
 # Delete Sale function
 @login_required(login_url='signin')
 def deleteSale(request, pk):
@@ -71,6 +75,7 @@ def deleteSale(request, pk):
     return render(request, 'accounts/delete.html', context)
 
 # sign un function
+@unauthenticated_user
 def signup(request):
     if request.user.is_authenticated:
         return redirect('homepage')
@@ -81,9 +86,11 @@ def signup(request):
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
             if form.is_valid():
-                form.save()
-                user = form.cleaned_data.get('username')
-                messages.success(request, 'Account Created Successfully For'+ user)
+                user = form.save()
+                username = form.cleaned_data.get('username')
+                group = Group.objects.get(name='employee')
+                user.groups.add(group)
+                messages.success(request, 'Account Created Successfully For'+ username)
 
                 return redirect('signin')
 
@@ -91,29 +98,25 @@ def signup(request):
         return render(request, 'accounts/signup.html', context)
 
 #sign in function
-
+@unauthenticated_user
 def signin(request):
-    if request.user.is_authenticated:
-        return redirect('homepage')
-    else:
-        if request.method == 'POST':
-            username=request.POST.get('username')
-            password=request.POST.get('password')
-            
+    if request.method == 'POST':
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('homepage')
+        else:
+            messages.info(request, 'Username OR Password is Incorrect')
 
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('homepage')
-            else:
-                messages.info(request, 'Username OR Password is Incorrect')
-
-
-
-        context = {}
+    context = {}
         
-        return render(request, 'accounts/signin.html', context)
+    return render(request, 'accounts/signin.html', context)
 
 def signOutUser(request):
     logout(request)
     return redirect('signin')
+
+def employeePage(request):
+    return render(request, 'accounts/employee.html')
